@@ -2,7 +2,7 @@
   <head></head>
   <body>
     <h1>You made it!</h1>
-    <a href="#/" onclick="ajax_direction('direction');">Forward</a>
+    <h1 id="clickable-title" onclick="swap_title();">!!!Click Here To Begin!!!</h1>
   </body>
 </html>
 
@@ -22,12 +22,27 @@ response.include_files()
 <script src="{{=URL('static','js/web2py.js')}}"
         type="text/javascript"></script>
 <script type="text/javascript">
-  ajax_direction = function(dir){
-  console.log("button");
-  jQuery.ajax({
-    url: '{{=forward}}',
-    data: {dir:"forward"},
-    method: 'get'
-  });
-}
+  swap_title = function(){$('#clickable-title').text('Ready!');}
+  establish_control_keys = function(){
+    console.log("loaded establish_control_keys");
+    $(document).one('keydown',function(e) {
+      console.log(e.which,"go");
+      ajax_direction("go",e.which);
+    });
+    $(document).one('keyup',function(e) {
+      console.log(e.which,"stop");
+      ajax_direction("stop",e.which);
+      establish_control_keys();
+    });
+  }
+
+  ajax_direction = function(command, key){
+    jQuery.ajax({
+      url: '{{=forward}}',
+      data: {key: key, command: command},
+      method: 'get'
+    });
+  }
+
+  $(document).ready(establish_control_keys());
 </script>
