@@ -1,19 +1,8 @@
 # python web2py.py -c server.crt -k server.key -a 'Engineering1!' -i 0.0.0.0 -p 8000
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
+import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
-
-def dashboard():
-  response.veiw = 'commands/dashboard.html'
-  return dict(forward=URL('receive'))
-
-def receive():
-  try:
-    command_dictionary[int(request.vars['key'])](request.vars['command'])
-  except:
-    pass
-  else:
-    pass
 
 ######################
 ## Motor Establishment
@@ -24,10 +13,33 @@ RPL.pinMode(motorL,RPL.SERVO)
 motorR = 1
 RPL.pinMode(motorR,RPL.SERVO)
 
-motorL_forward = 1500
-motorL_backward = 2500
-motorR_forward = 1500
-motorR_backward = 2500
+def read_parameters_as_xml():
+  parser = ET.ElementTree() # use .get('param')
+  return parser.parse('command_parameters.txt')
+
+################
+## Web Functions
+################
+
+def dashboard():
+  response.veiw = 'commands/dashboard.html'
+  xml_params = read_parameters_as_xml() 
+  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
+
+def update_parameters():
+  commands = ET.Element('commands') # Create an xml object
+  for command in ['motorL_forward','motorL_backward','motorR_forward','motorR_backward']: # write all parameters to the xml object
+    commands.set(command, request.vars[command])
+  ET.ElementTree(commands).write('command_parameters.txt')
+  redirect(URL('dashboard'))
+
+def receive():
+  try:
+    command_dictionary[int(request.vars['key'])](request.vars['command'])
+  except:
+    pass
+  else:
+    pass
 
 ######################
 ## Individual commands
@@ -35,39 +47,44 @@ motorR_backward = 2500
 
 def forward(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,motorL_forward)
-    RPL.servoWrite(motorR,motorR_forward)
+    xml_params = read_parameters_as_xml() 
+    RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
+    RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def reverse(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,motorL_backward)
-    RPL.servoWrite(motorR,motorR_backward)
+    xml_params = read_parameters_as_xml() 
+    RPL.servoWrite(motorL,int(xml_params.get('motorL_backward')))
+    RPL.servoWrite(motorR,int(xml_params.get('motorR_backward')))
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def right(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,motorL_forward)
-    RPL.servoWrite(motorR,motorR_backward)
+    xml_params = read_parameters_as_xml() 
+    RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
+    RPL.servoWrite(motorR,int(xml_params.get('motorR_backward')))
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def left(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,motorL_backward)
-    RPL.servoWrite(motorR,motorR_forward)
+    xml_params = read_parameters_as_xml() 
+    RPL.servoWrite(motorL,int(xml_params.get('motorL_backward')))
+    RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def forward_right(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,motorL_forward)
+    xml_params = read_parameters_as_xml() 
+    RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
     RPL.servoWrite(motorR,0)
   else:
     RPL.servoWrite(motorL,0)
@@ -75,23 +92,26 @@ def forward_right(dir):
 
 def forward_left(dir):
   if(dir=='go'):
+    xml_params = read_parameters_as_xml() 
     RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,motorR_forward)
+    RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def backward_right(dir):
   if(dir=='go'):
+    xml_params = read_parameters_as_xml() 
     RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,motorR_backward)
+    RPL.servoWrite(motorR,int(xml_params.get('motorR_backward')))
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def backward_left(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,motorL_backward)
+    xml_params = read_parameters_as_xml() 
+    RPL.servoWrite(motorL,int(xml_params.get('motorL_backward')))
     RPL.servoWrite(motorR,0)
   else:
     RPL.servoWrite(motorL,0)
