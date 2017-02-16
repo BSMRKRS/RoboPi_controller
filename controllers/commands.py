@@ -24,45 +24,50 @@ RPL.pinMode(motorL,RPL.SERVO)
 motorR = 1
 RPL.pinMode(motorR,RPL.SERVO)
 
+motorL_forward = 1500
+motorL_backward = 2500
+motorR_forward = 1500
+motorR_backward = 2500
+
 ######################
 ## Individual commands
 ######################
 
 def forward(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,1500)
-    RPL.servoWrite(motorR,1500)
+    RPL.servoWrite(motorL,motorL_forward)
+    RPL.servoWrite(motorR,motorR_forward)
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def reverse(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,2500)
-    RPL.servoWrite(motorR,2500)
+    RPL.servoWrite(motorL,motorL_backward)
+    RPL.servoWrite(motorR,motorR_backward)
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def right(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,1500)
-    RPL.servoWrite(motorR,2500)
+    RPL.servoWrite(motorL,motorL_forward)
+    RPL.servoWrite(motorR,motorR_backward)
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def left(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,2500)
-    RPL.servoWrite(motorR,1500)
+    RPL.servoWrite(motorL,motorL_backward)
+    RPL.servoWrite(motorR,motorR_forward)
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def forward_right(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,1500)
+    RPL.servoWrite(motorL,motorL_forward)
     RPL.servoWrite(motorR,0)
   else:
     RPL.servoWrite(motorL,0)
@@ -71,7 +76,7 @@ def forward_right(dir):
 def forward_left(dir):
   if(dir=='go'):
     RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,1500)
+    RPL.servoWrite(motorR,motorR_forward)
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
@@ -79,14 +84,14 @@ def forward_left(dir):
 def backward_right(dir):
   if(dir=='go'):
     RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,2500)
+    RPL.servoWrite(motorR,motorR_backward)
   else:
     RPL.servoWrite(motorL,0)
     RPL.servoWrite(motorR,0)
 
 def backward_left(dir):
   if(dir=='go'):
-    RPL.servoWrite(motorL,2500)
+    RPL.servoWrite(motorL,motorL_backward)
     RPL.servoWrite(motorR,0)
   else:
     RPL.servoWrite(motorL,0)
