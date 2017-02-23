@@ -98,9 +98,9 @@ You can add or modify outputs to motors that are adjustable on the web page, but
 
 In the more advanced usage, you can set the functionality of new keyboard buttons. You'll do the following 3 steps, and then follow the steps for Intermediate Usage.
 
-1. Any button you push sends an AJAX command to the `receive` function on `/controllers/commands.py`. This function maps the key you press onto a function in the command_dictionary, defined at the very bottom of `/controllers/commands.py`. 
+1. Any button you push while on the dashboard web page sends an AJAX command to the `receive` function on `/controllers/commands.py`. This function maps the key you press onto a function in the command_dictionary, defined at the very bottom of `/controllers/commands.py`. 
 
-  If you want to add a new command to a button, you first have to add the character code of the key and the name of function you want to call when that key is pressed to the command_dictionary. Each entry has this form: `(CHARACTER_CODE,FUNCTION_NAME)` and the entries are all separated by commas. Suppose you want to add a command to pan a camera to the right. You would add something like this to the command_dictionary `(76,pan_right)`. 76 is the character code of the l key.
+  If you want to add a new command to a button, you first have to add the character code of the key and the name of function you want to call when that key is pressed to the command_dictionary. Each entry has this form: `(CHARACTER_CODE,FUNCTION_NAME)` and the entries are all separated by commas. Suppose you want to add a command to pan a camera to the right when the k key is pressed. You would add something like this to the command_dictionary `(75,pan_right)`. 75 is the character code of the k key.
 
 2. You then have to add the function that will be called when the key is pressed. We would probably add something like this:
 
@@ -113,4 +113,4 @@ In the more advanced usage, you can set the functionality of new keyboard button
       RPL.servoWrite(motor_pan,0)
   ```
 
-  Notice that we call motor_pan; that would have to established as in the Basic Usage section. We also call pan_forward from the xml_params; that will have to be established like in the Intermediate Usage section.
+  Notice that we call a variable called motor_pan, which is the pin identifier indicating where the pan servo is attached to the RoboPi; that would have to established as in the Basic Usage section. We also call the parameter pan_forward from the xml_params; that will have to be established like in the Intermediate Usage section.
