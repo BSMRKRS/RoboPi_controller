@@ -56,7 +56,7 @@ You can add or modify outputs to motors that are adjustable on the web page, but
     <input name="motorL_forward" value={{=motorL_forward}} />
   ```
 
-  They all live between the `<form>` and `</form>` tag -- that's important. The text in the `<p>` section is the label, i.e., the text that shows above the input field. In the `<input>` tag, the text after `name=` -- in this case 'motorL_formard' -- is the name of the variable that will be stored, and can be accessed later by the motors. The variable after `value=` -- in this case {{=motorL_forward}} -- is value given to the web page that will show up in the input field when you view the page. Let's all agree to just give these the same name. You can add a new variable that will be accessible to the motors by duplicating these fields and setting the names.So we could add the following:
+  They all live between the `<form>` and `</form>` tag -- that's important. The text in the `<p>` section is the label, i.e., the text that shows above the input field. In the `<input>` tag, the text after `name=` -- in this case 'motorL_formard' -- is the name of the variable that will be stored, and can be accessed later by the motors. The variable after `value=` -- in this case {{=motorL_forward}} -- is value given to the web page that will show up in the input field when you view the page. Let's all agree to just give these the same name. You can add a new variable that will be accessible to the motors by duplicating these fields and setting the names.So we could add the following:  
 
   ```
     <p>New Motor Forward Setting</p>
