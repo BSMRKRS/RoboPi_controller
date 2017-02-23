@@ -67,10 +67,10 @@ You can add or modify outputs to motors that are adjustable on the web page, but
 
 3. The dashboard needs to have access to the variables that we have input forms for. The `def dashboard()` function in `/controllers/commands.py` prepares information for the dashboard, so that's where this work is done.  
 
-The `/views/commands/dashboard.html` file has access to everything in the dictionary established in the line that looks something like this:  
+  The `/views/commands/dashboard.html` file has access to everything in the dictionary established in the line that looks something like this:  
 
   ```
-  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
+    return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
   ```
 
   Each entry in that dictionary is a key=value pair separated by commas that can be called in `/views/commands/dashboard.html` like this: `{{=KEY_NAME}}`. The input fields will need to display the value stored in `command_parameters.txt`, so each key=value pair will look like `KEY_NAME=xml_params.get('VARIABLE_NAME')`. Like with step 2, let's just agree to name these the same things, so in this example, we'd add `,motor_new_forward=xml_params.get('motor_new_forward')` at the end of the list of entries in the dictionary. This will make `{{=motor_new_forward}}` return 2500 in `/views/commands/dashboard.html`.
