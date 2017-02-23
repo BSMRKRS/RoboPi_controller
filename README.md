@@ -13,9 +13,9 @@ You can add or modify hard-coded outputs to motors in the existing button respon
   ```
   motor_new = 4
   RPL.pinMode(motor_new,RPL.SERVO)
-  ```  
+  ```
 
-  Note that the pin labeled 5 on the RoboPi has to be called 4 in the code. Sigh. The pin labels are 1 indexed on the board, and 0 indexed in the code.  
+  Note that the pin labeled 5 on the RoboPi has to be called 4 in the code. Sigh. The pin labels are 1 indexed on the board, and 0 indexed in the code.
 
 2. In `/controllers/commands.py`, under the section heading Individual Commands, you will find several blocks with this form:
   ```  
