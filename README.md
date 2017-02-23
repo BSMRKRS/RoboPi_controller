@@ -66,23 +66,30 @@ You can add or modify outputs to motors that are adjustable on the web page, but
   When we hit 'submit' on the dashboard, all of the values from these input fields are written to a file in web2py folder called `command_parameters.txt`.
 
 3. The dashboard needs to have access to the variables that we have input forms for. The `def dashboard()` function in `/controllers/commands.py` prepares information for the dashboard, so that's where this work is done.  
+
 The `/views/commands/dashboard.html` file has access to everything in the dictionary established in the line that looks something like this:  
+
   ```  
-  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))  
+  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
   ```  
+
   Each entry in that dictionary is a key=value pair separated by commas that can be called in `/views/commands/dashboard.html` like this: `{{=KEY_NAME}}`. The input fields will need to display the value stored in `command_parameters.txt`, so each key=value pair will look like `KEY_NAME=xml_params.get('VARIABLE_NAME')`. Like with step 2, let's just agree to name these the same things, so in this example, we'd add `,motor_new_forward=xml_params.get('motor_new_forward')` at the end of the list of entries in the dictionary. This will make `{{=motor_new_forward}}` return 2500 in `/views/commands/dashboard.html`.
+
 4. Setting the motor outputs is similar to step 2 in the Basic Usage section. Instead of using numerical values, though, you can call the parameters you set in the view.  
-  ```  
-  def forward(dir):  
-    if(dir=='go'):  
-      xml_params = read_parameters_as_xml()   
-      RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))  
-      RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))  
-      RPL.servoWrite(motor_new,int(xml_params.get('motor_new_forward')))  
-    else:  
-      RPL.servoWrite(motorL,0)  
-      RPL.servoWrite(motorR,0)  
-      RPL.servoWrite(motor_new,0)  
-  ```  
+
+  ```
+  def forward(dir):
+    if(dir=='go'):
+      xml_params = read_parameters_as_xml()
+      RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
+      RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
+      RPL.servoWrite(motor_new,int(xml_params.get('motor_new_forward')))
+    else:
+      RPL.servoWrite(motorL,0)
+      RPL.servoWrite(motorR,0)
+      RPL.servoWrite(motor_new,0)
+  ```
+
   The `read_parameters_as_xml()` function loads the parameters from `command_parameters.txt` and the parameters can be called using the `.get()` command. If we set motor_new_forward using `name="motor_new_forward"` to 2500, then `int(xml_params.get('motor_new_forward'))` will return 2500.
+
 5. Go to the web interface and set your new variables.  
