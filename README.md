@@ -9,11 +9,14 @@ The DRCS can be modified in 3 ways:
 You can add or modify hard-coded outputs to motors in the existing button responses relatively easily. This process has two parts: 
 
 1. If you want to use additional motor outputs, you'll need to initialize them in the Motor Establishment section. For example, if you want to add a new servo motor that runs on pin 5, you would add these lines of code:  
+
+  ```
+  motor_new = 4
+  RPL.pinMode(motor_new,RPL.SERVO)
   ```  
-  motor_new = 4  
-  RPL.pinMode(motor_new,RPL.SERVO)  
-  ```  
+
   Note that the pin labeled 5 on the RoboPi has to be called 4 in the code. Sigh. The pin labels are 1 indexed on the board, and 0 indexed in the code.  
+
 2. In `/controllers/commands.py`, under the section heading Individual Commands, you will find several blocks with this form:
   ```  
   def forward(dir):  
