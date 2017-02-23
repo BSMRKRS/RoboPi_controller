@@ -4,6 +4,10 @@ I hope you enjoy working with the BSMRKRS Direct Robot Contol System. The DRCS o
 
 The DRCS can be modified in 3 ways:
 
+# Driving a Robot
+
+The server should start when you power up your BSMRKRS. Navigate to https://172.21.100.XX:8000/RoboPi_controller/commands/dashboard. Click on the web page to ensure that your computer is focused on the dashboard (so that key presses are captured correctly) and start driving! If this doesn't work, the most likely issue is that your computer is not on the same wireless network as your robot.
+
 # Basic Usage
 
 You can add or modify hard-coded outputs to motors in the existing button responses relatively easily. This process has two parts: 
