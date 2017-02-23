@@ -48,17 +48,23 @@ You can add or modify hard-coded outputs to motors in the existing button respon
 You can add or modify outputs to motors that are adjustable on the web page, but still use the same button settings. This process has 5 parts.
 
 1. Follow step 1 in the Basic Usage section.
+
 2. You will need to add new form fields on the view page. In `/views/commands/dashboard.html` you will find a block of code that has several elements like this:  
-  ```  
-    <p>L Motor Forward Setting</p>  
-    <input name="motorL_forward" value={{=motorL_forward}} />  
-  ```  
-  They all live between the `<form>` and `</form>` tag -- that's important. The text in the `<p>` section is the label, i.e., the text that shows above the input field. In the `<input>` tag, the text after `name=` -- in this case 'motorL_formard' -- is the name of the variable that will be stored, and can be accessed later by the motors. The variable after `value=` -- in this case {{=motorL_forward}} -- is value given to the web page that will show up in the input field when you view the page. Let's all agree to just give these the same name. You can add a new variable that will be accessible to the motors by duplicating these fields and setting the names.So we could add the following:  
-  ```  
-    <p>New Motor Forward Setting</p>  
-    <input name="motor_new_forward" value={{=motor_new_forward}} />  
-  ```  
+
+  ```
+    <p>L Motor Forward Setting</p>
+    <input name="motorL_forward" value={{=motorL_forward}} />
+  ```
+
+  They all live between the `<form>` and `</form>` tag -- that's important. The text in the `<p>` section is the label, i.e., the text that shows above the input field. In the `<input>` tag, the text after `name=` -- in this case 'motorL_formard' -- is the name of the variable that will be stored, and can be accessed later by the motors. The variable after `value=` -- in this case {{=motorL_forward}} -- is value given to the web page that will show up in the input field when you view the page. Let's all agree to just give these the same name. You can add a new variable that will be accessible to the motors by duplicating these fields and setting the names.So we could add the following:
+
+  ```
+    <p>New Motor Forward Setting</p>
+    <input name="motor_new_forward" value={{=motor_new_forward}} />
+  ```
+
   When we hit 'submit' on the dashboard, all of the values from these input fields are written to a file in web2py folder called `command_parameters.txt`.
+
 3. The dashboard needs to have access to the variables that we have input forms for. The `def dashboard()` function in `/controllers/commands.py` prepares information for the dashboard, so that's where this work is done.  
 The `/views/commands/dashboard.html` file has access to everything in the dictionary established in the line that looks something like this:  
   ```  
