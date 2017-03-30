@@ -2,6 +2,7 @@
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
 import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
+import subprocess
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 ######################
@@ -24,7 +25,7 @@ def read_parameters_as_xml():
 def dashboard():
   response.veiw = 'commands/dashboard.html'
   xml_params = read_parameters_as_xml() 
-  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
+  return dict(start_camera=URL('start_camera'),forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
 
 def update_parameters():
   commands = ET.Element('commands') # Create an xml object
@@ -40,6 +41,14 @@ def receive():
     pass
   else:
     pass
+
+def start_camera():
+  path = "/usr/src/mjpg-streamer/mjpg-streamer-experimental"
+  #call([path+"/mjpg_streamer","&","-o","'"+path+"/output_http.so -w ./www -p 9080'", "-i", "'"+path+"/input_raspicam.so -x 640 -y 480 -fps 10 -rot 180'"],shell=True)
+  subprocess.call(["sh","start_camera.sh"])
+  print("Done loading camera")
+  redirect(URL('dashboard'))
+  
 
 ######################
 ## Individual commands
