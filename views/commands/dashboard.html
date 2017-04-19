@@ -1,7 +1,28 @@
 <html>
-  <head></head>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
   <body>
-    <h1>You made it!</h1>
+    <!-- Latest compiled and minified JavaScript -->
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Navigation tabs -->
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="#driving" role="tab" data-toggle="tab">Driving control</a></li>
+      <li role="presentation"><a href="#arm" role="tab" data-toggle="tab">Arm control</a></li>
+      <li role="presentation"><a href="#sensors" role="tab" data-toggle="tab">Sensors</a></li>
+    </ul>
+
+    <!-- Navigation content -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="driving">Driving control tab content</div>
+      <div role="tabpanel" class="tab-pane" id="arm">Arm control tab content</div>
+      <div role="tabpanel" class="tab-pane" id="sensors">Sensors content</div>
+    </div>
+
+    <h1 class="label">You made it!</h1>
     <h1 id="clickable-title" onclick="swap_title();">!!!Click Here To Begin!!!</h1>
     <p>You can use the qwe,asd,zc keys to drive.</p>
     <table>
