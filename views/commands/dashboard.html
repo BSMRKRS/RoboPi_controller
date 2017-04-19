@@ -1,12 +1,27 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BSM Robot Controller</title>
+
     <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
   <body>
     <!-- Latest compiled and minified JavaScript -->
-    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+          //
+          $('#driving').load('DriveControls.html');
+        });
+    </script>
+
+    <!-- Page header -->
+    <h1>BSM Robot Controller</h1>
 
     <!-- Navigation tabs -->
     <ul class="nav nav-tabs">
@@ -17,52 +32,98 @@
 
     <!-- Navigation content -->
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="driving">Driving control tab content</div>
-      <div role="tabpanel" class="tab-pane" id="arm">Arm control tab content</div>
-      <div role="tabpanel" class="tab-pane" id="sensors">Sensors content</div>
-    </div>
+      <!-- Driving control tab -->
+      <div role="tabpanel" class="tab-pane active" id="driving">
 
-    <h1 class="label">You made it!</h1>
-    <h1 id="clickable-title" onclick="swap_title();">!!!Click Here To Begin!!!</h1>
-    <p>You can use the qwe,asd,zc keys to drive.</p>
-    <table>
-      <tr>
-        <td style="border:2px solid black;">q</td>
-        <td style="border:2px solid black;">w</td>
-        <td style="border:2px solid black;">e</td>
-      </tr>
-      <tr>
-        <td style="border:2px solid black;">a</td>
-        <td style="border:2px solid black;">s</td>
-        <td style="border:2px solid black;">d</td>
-      </tr>
-      <tr>
-        <td style="border:2px solid black;">z</td>
-        <td style="border:2px solid black;"></td>
-        <td style="border:2px solid black;">c</td>
-      </tr>
-    </table>
-    <p>Add more behavior in controllers/commands!</p>
-    <form action={{=update_parameters}}>
-      <p>L Motor Forward Setting</p>
-      <input name="motorL_forward" value={{=motorL_forward}} />
-      <p>L Motor Backward Setting</p>
-      <input name="motorL_backward" value={{=motorL_backward}} />
-      <p>R Motor Forward Setting</p>
-      <input name="motorR_forward" value={{=motorR_forward}} />
-      <p>R Motor Backward Setting</p>
-      <input name="motorR_backward" value={{=motorR_backward}} />
-      <br/>
-      <input type="submit" />
-    </form>
+        <div class="row">
+          <div class="col-md-7">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Video Stream</h3>
+              </div>
+              <div class="panel-body">
+                <!-- Placeholder hairless cat to be replaced with embedded video stream -->
+                <img src="https://s-media-cache-ak0.pinimg.com/originals/bc/d8/84/bcd8841f69279f74248515919c8c1814.jpg" style="max-width: 100%; max-height: 100%" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Drive Controls</h3>
+              </div>
+              <div class="panel-body">
+                <p>You can use the qwe,asd,zc keys to drive.</p>
+                <div style="text-align: center; font-family: 'Courier New', 'Courier', 'monospace'; font-size: 24pt">
+                  <div class="row">
+                    <div class="col-md-1"><span class="label label-primary">q</span></div>
+                    <div class="col-md-1"><span class="label label-primary">w</span></div>
+                    <div class="col-md-1"><span class="label label-primary">e</span></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1"><span class="label label-primary">a</span></div>
+                    <div class="col-md-1"><span class="label label-primary">s</span></div>
+                    <div class="col-md-1"><span class="label label-primary">d</span></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1"><span class="label label-primary">z</span></div>
+                    <div class="col-md-1"><span class="label label-primary">&nbsp;</span></div>
+                    <div class="col-md-1"><span class="label label-primary">c</span></div>
+                  </div>
+                </div>
+                <br />
+                <p>Add more behavior in controllers/commands!</p>
+
+                <br />
+                <form action={{=update_parameters}}>
+                  <p>L Motor Forward Setting</p>
+                  <input name="motorL_forward" value={{=motorL_forward}} />
+                  <p>L Motor Backward Setting</p>
+                  <input name="motorL_backward" value={{=motorL_backward}} />
+                  <p>R Motor Forward Setting</p>
+                  <input name="motorR_forward" value={{=motorR_forward}} />
+                  <p>R Motor Backward Setting</p>
+                  <input name="motorR_backward" value={{=motorR_backward}} />
+                  <br/>
+                  <input type="submit" />
+                </form>
+
+                {{
+                response.files.insert(0,URL('static','js/jquery.js'))
+                response.include_meta()
+                response.include_files()
+                }}
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Sensor Readings</h3>
+              </div>
+              <div class="panel-body">
+                <div class="well">
+                  <p>Distance Sensor Reading: XYZ</p>
+                  <p>Right Proximity Sensor Reading: XYZ</p>
+                  <p>Left Proximity Sensor Reading: XYZ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arm control tab -->
+      <div role="tabpanel" class="tab-pane" id="arm">
+        Arm control content placeholder
+      </div>
+
+      <!-- Sensors tab -->
+      <div role="tabpanel" class="tab-pane" id="sensors">
+        Sensors content placeholder
+      </div>
+    </div>
   </body>
 </html>
 
-{{
-response.files.insert(0,URL('static','js/jquery.js'))
-response.include_meta()
-response.include_files()
-}}
 <script type="text/javascript"><!--
     // These variables are used by the web2py_ajax_init
         // function in web2py.js (which is loaded below).
