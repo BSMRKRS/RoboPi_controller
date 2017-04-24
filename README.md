@@ -6,13 +6,19 @@ I hope you enjoy working with the BSMRKRS Direct Robot Contol System. The DRCS o
 
 The server should start when you power up your BSMRKRS. Navigate to https://172.21.100.XX:8000/RoboPi_controller/commands/dashboard. Click on the web page to ensure that your computer is focused on the dashboard (so that key presses are captured correctly) and start driving! If this doesn't work, the most likely issue is that your computer is not on the same wireless network as your robot.
 
+# Modifying Your Local Code
+
+SSH allows you to access one computer from another. You can SSH into your pi by opening a terminal on your laptop, joining the Robo network, and typing `ssh student@172.21.100.XX`. You'll then enter the password for the Student login.
+
+Once you have a console open on your pi, you can access the files described below by entering the RoboPi_controller with the command `cd ~/web2py/applications/RoboPi_controller`.
+
 The DRCS can be modified in 3 ways:
 
 # Basic Usage
 
 You can add or modify hard-coded outputs to motors in the existing button responses relatively easily. This process has two parts: 
 
-1. If you want to use additional motor outputs, you'll need to initialize them in the Motor Establishment section. For example, if you want to add a new servo motor that runs on pin 5, you would add these lines of code:  
+1. If you want to use additional motor outputs, you'll need to initialize them in the Motor Establishment section. For example, if you want to add a new servo motor that runs on pin 5, you would add these lines of code to `/controllers/commands.py`:  
 
   ```
   motor_new = 4
