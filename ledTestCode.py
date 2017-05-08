@@ -18,5 +18,5 @@ def blink():
     time.sleep(0.5)
     print "led OFF"
 i = int(raw_input("How many times the light will blink>"))
-for n in range(i+1):
+for n in range(i):
     blink()
