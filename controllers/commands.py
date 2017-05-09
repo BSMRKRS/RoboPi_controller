@@ -2,6 +2,7 @@
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
 import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
+import time as time
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 ######################
@@ -36,13 +37,20 @@ def update_parameters():
 def receive():
   try:
     command_dictionary[int(request.vars['key'])](request.vars['command'])
+    return RPL.analogRead(0)
   except:
-    pass
+    forward('stop')
+    return RPL.analogRead(0)
   else:
-    pass
+    forward('stop')
 
 def sensor():
-  return RPL.analogRead(int(request.vars['pin']))
+  try:
+    return RPL.analogRead(int(request.vars['pin']))
+  except Exception as e:
+    return(e)
+  else:
+    return("OTHER ERROR")
 
 ######################
 ## Individual commands
