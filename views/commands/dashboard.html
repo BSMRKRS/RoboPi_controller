@@ -34,6 +34,12 @@
       <br/>
       <input type="submit" />
     </form>
+    <br/>
+    <h2>Sensor Reading</h2>
+    <p>
+      Pin 0:
+      <span id="sensor_reading0"></span>
+    </p>
   </body>
 </html>
 
@@ -75,5 +81,18 @@ response.include_files()
     });
   }
 
-  $(document).ready(establish_control_keys());
+  ajax_sensor = function(pin){
+    jQuery.ajax({
+      url: '{{=sensor}}',
+      data: {pin: pin},
+      method: 'get',
+      success: function(data){
+        jQuery('#sensor_reading'+pin).html(data);
+      }
+    });
+  }
+  setInterval(function(){ajax_sensor(0);}, 500);
+
+
+  $(docuvent).ready(establish_control_keys());
 </script>
