@@ -25,7 +25,7 @@ def read_parameters_as_xml():
 def dashboard():
   response.veiw = 'commands/dashboard.html'
   xml_params = read_parameters_as_xml() 
-  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),sensor=URL('sensor'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
+  return dict(camera='http://'+request.env.http_host.replace('8000','8080')+'/?action=stream',forward=URL('receive'),update_parameters=URL('update_parameters'),sensor=URL('sensor'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
 
 def update_parameters():
   commands = ET.Element('commands') # Create an xml object

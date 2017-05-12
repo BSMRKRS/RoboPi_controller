@@ -1,0 +1,1 @@
+/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8080" -i "input_raspicam.so -x 640 -y 480 -fps 10 -rot 180"
