@@ -47,6 +47,7 @@ def receive():
     return RPL.analogRead(0)
   else:
     forward('stop')
+    return RPL.analogRead(0)
 
 def sensor():
   try:
@@ -58,6 +59,7 @@ def sensor():
 
 def start_camera():
   os.system('/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8080" -i "input_raspicam.so -x 640 -y 480 -fps 10 -rot 180"')
+  return RPL.analogRead(0)
 
 ######################
 ## Individual commands
