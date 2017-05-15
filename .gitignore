@@ -1,4 +1,4 @@
-*.swp
-*.swo
+*.sw*
 *.py~
+*__init__.pyc
 errors/*
