@@ -3,6 +3,7 @@
 import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
 import time as time
+import os
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 ######################
@@ -10,9 +11,12 @@ RPL.RoboPiInit("/dev/ttyAMA0",115200)
 ######################
 
 motorL = 0
-RPL.pinMode(motorL,RPL.SERVO)
 motorR = 1
-RPL.pinMode(motorR,RPL.SERVO)
+try:
+  RPL.pinMode(motorL,RPL.SERVO)
+  RPL.pinMode(motorR,RPL.SERVO)
+except:
+  pass
 
 def read_parameters_as_xml():
   parser = ET.ElementTree() # use .get('param')
@@ -25,7 +29,7 @@ def read_parameters_as_xml():
 def dashboard():
   response.veiw = 'commands/dashboard.html'
   xml_params = read_parameters_as_xml() 
-  return dict(camera='http://'+request.env.http_host.replace('8000','8080')+'/?action=stream',forward=URL('receive'),update_parameters=URL('update_parameters'),sensor=URL('sensor'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
+  return dict(start_camera=URL('start_camera'),camera='http://'+request.env.http_host.replace('8000','8080')+'/?action=stream',forward=URL('receive'),update_parameters=URL('update_parameters'),sensor=URL('sensor'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
 
 def update_parameters():
   commands = ET.Element('commands') # Create an xml object
@@ -51,6 +55,9 @@ def sensor():
     return(e)
   else:
     return("OTHER ERROR")
+
+def start_camera():
+  os.system('/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8080" -i "input_raspicam.so -x 640 -y 480 -fps 10 -rot 180"')
 
 ######################
 ## Individual commands
