@@ -8,10 +8,13 @@ RPL.RoboPiInit("/dev/ttyAMA0",115200)
 ## Motor Establishment
 ######################
 
+freq = 3000
 motorL = 0
-RPL.pinMode(motorL,RPL.SERVO)
+RPL.pinMode(motorL,RPL.PWM)
+RPL.pwmWrite(motorL,1500,freq)
 motorR = 1
-RPL.pinMode(motorR,RPL.SERVO)
+RPL.pinMode(motorR,RPL.PWM)
+RPL.pwmWrite(motorR,1500,freq)
 
 def read_parameters_as_xml():
   parser = ET.ElementTree() # use .get('param')
@@ -48,74 +51,74 @@ def receive():
 def forward(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
-    RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
+    RPL.pwmWrite(motorL,int(xml_params.get('motorL_forward')), freq)
+    RPL.pwmWrite(motorR,int(xml_params.get('motorR_forward')), freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500, freq)
+    RPL.pwmWrite(motorR,1500, freq)
 
 def reverse(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,int(xml_params.get('motorL_backward')))
-    RPL.servoWrite(motorR,int(xml_params.get('motorR_backward')))
+    RPL.pwmWrite(motorL,int(xml_params.get('motorL_backward')), freq)
+    RPL.pwmWrite(motorR,int(xml_params.get('motorR_backward')), freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500, freq)
+    RPL.pwmWrite(motorR,1500, freq)
 
 def right(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
-    RPL.servoWrite(motorR,int(xml_params.get('motorR_backward')))
+    RPL.pwmWrite(motorL,int(xml_params.get('motorL_forward')), freq)
+    RPL.pwmWrite(motorR,int(xml_params.get('motorR_backward')), freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,1500,freq)
 
 def left(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,int(xml_params.get('motorL_backward')))
-    RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
+    RPL.pwmWrite(motorL,int(xml_params.get('motorL_backward')),freq)
+    RPL.pwmWrite(motorR,int(xml_params.get('motorR_forward')),freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,1500,freq)
 
 def forward_right(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,int(xml_params.get('motorL_forward')))
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,int(xml_params.get('motorL_forward')),freq)
+    RPL.pwmWrite(motorR,1500,freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,1500,freq)
 
 def forward_left(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,int(xml_params.get('motorR_forward')))
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,int(xml_params.get('motorR_forward')),freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,1500,freq)
 
 def backward_right(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,int(xml_params.get('motorR_backward')))
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,int(xml_params.get('motorR_backward')),freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,1500,freq)
 
 def backward_left(dir):
   if(dir=='go'):
     xml_params = read_parameters_as_xml() 
-    RPL.servoWrite(motorL,int(xml_params.get('motorL_backward')))
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,int(xml_params.get('motorL_backward')),freq)
+    RPL.pwmWrite(motorR,1500,freq)
   else:
-    RPL.servoWrite(motorL,0)
-    RPL.servoWrite(motorR,0)
+    RPL.pwmWrite(motorL,1500,freq)
+    RPL.pwmWrite(motorR,1500,freq)
 
 command_dictionary = dict([(87,forward),(83,reverse),(68,right),(65,left),(69,forward_right),(81,forward_left),(67,backward_right),(90,backward_left)])
 # 87:w, 83:s, 68:d, 65:a, 69:e, 81:q, 90:z, 67:c
