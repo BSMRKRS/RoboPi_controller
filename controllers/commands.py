@@ -2,6 +2,8 @@
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
 import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
+import time as time
+import os
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 ######################
@@ -10,11 +12,14 @@ RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 freq = 3000
 motorL = 0
-RPL.pinMode(motorL,RPL.PWM)
-RPL.pwmWrite(motorL,1500,freq)
 motorR = 1
-RPL.pinMode(motorR,RPL.PWM)
-RPL.pwmWrite(motorR,1500,freq)
+try:
+  RPL.pinMode(motorL,RPL.PWM)
+  RPL.pwmWrite(motorL,1500,freq)
+  RPL.pinMode(motorR,RPL.PWM)
+  RPL.pwmWrite(motorR,1500,freq)
+except:
+  pass
 
 def read_parameters_as_xml():
   parser = ET.ElementTree() # use .get('param')
@@ -27,7 +32,7 @@ def read_parameters_as_xml():
 def dashboard():
   response.veiw = 'commands/dashboard.html'
   xml_params = read_parameters_as_xml() 
-  return dict(forward=URL('receive'),update_parameters=URL('update_parameters'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
+  return dict(start_camera=URL('start_camera'),camera='http://'+request.env.http_host.replace('8000','8080')+'/?action=stream',forward=URL('receive'),update_parameters=URL('update_parameters'),sensor=URL('sensor'),motorL_forward=xml_params.get('motorL_forward'),motorL_backward=xml_params.get('motorL_backward'),motorR_forward=xml_params.get('motorR_forward'),motorR_backward=xml_params.get('motorR_backward'))
 
 def update_parameters():
   commands = ET.Element('commands') # Create an xml object
@@ -39,10 +44,25 @@ def update_parameters():
 def receive():
   try:
     command_dictionary[int(request.vars['key'])](request.vars['command'])
+    return RPL.analogRead(0)
   except:
-    pass
+    forward('stop')
+    return RPL.analogRead(0)
   else:
-    pass
+    forward('stop')
+    return RPL.analogRead(0)
+
+def sensor():
+  try:
+    return RPL.analogRead(int(request.vars['pin']))
+  except Exception as e:
+    return(e)
+  else:
+    return("OTHER ERROR")
+
+def start_camera():
+  os.system('/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8080" -i "input_raspicam.so -x 640 -y 480 -fps 10 -rot 180"')
+  return RPL.analogRead(0)
 
 ######################
 ## Individual commands

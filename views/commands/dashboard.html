@@ -7,12 +7,12 @@
     <title>BSM Robot Controller</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{=URL('static','bootstrap.min.css')}}"></link>
   </head>
   <body>
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="{{=URL('static','jquery-2.2.4.min.js')}}"></script>
+    <script src="{{=URL('static','bootstrap.min.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
           //
@@ -42,8 +42,9 @@
                 <h3 class="panel-title">Video Stream</h3>
               </div>
               <div class="panel-body">
-                <!-- Placeholder hairless cat to be replaced with embedded video stream -->
-                <img src="https://s-media-cache-ak0.pinimg.com/originals/bc/d8/84/bcd8841f69279f74248515919c8c1814.jpg" style="max-width: 100%; max-height: 100%" />
+                <a href="{{=start_camera}}" class="">Start Camera</a>
+                <p>Camera streaming from: {{=camera}}</p>
+                <img src="{{=camera}}" style="max-width: 100%; max-height: 100%" />
               </div>
             </div>
           </div>
@@ -104,6 +105,11 @@
                   <p>Distance Sensor Reading: XYZ</p>
                   <p>Right Proximity Sensor Reading: XYZ</p>
                   <p>Left Proximity Sensor Reading: XYZ</p>
+		  <h2>Sensor Reading</h2>
+		  <p>
+		    Pin 0:
+		    <span id="sensor_reading0"></span>
+		  </p>
                 </div>
               </div>
             </div>
@@ -239,9 +245,29 @@
     jQuery.ajax({
       url: '{{=forward}}',
       data: {key: key, command: command},
-      method: 'get'
+      method: 'get',
+      success: function(data){
+        jQuery('#sensor_reading0').html(data);
+      },
+      failure: function(data){alert("please wait");}
     });
   }
 
-  $(document).ready(establish_control_keys());
+  ajax_sensor = function(pin){
+    jQuery.ajax({
+      url: '{{=sensor}}',
+      data: {pin: pin},
+      method: 'get',
+      success: function(data){
+        jQuery('#sensor_reading'+pin).html(data);
+	setTimeout(function(){ajax_sensor(0);},500);
+      },
+      failure: function(data){}
+    });
+  }
+
+
+  $(document).ready(function(){
+    establish_control_keys();
+  });
 </script>
