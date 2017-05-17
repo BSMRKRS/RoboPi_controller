@@ -2,9 +2,25 @@
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
 import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
+RPL.RoboPiInit("/dev/ttyAMA0",115200)
 import time as time
 import os
-RPL.RoboPiInit("/dev/ttyAMA0",115200)
+import logging
+import logging.handlers
+import random
+
+################
+## Logging Setup
+################
+
+LOG_FILENAME = '/home/student/web2py/logs/logging_rotatingfile_example.out'
+log = logging.getLogger('RoboPi_controller')
+log.setLevel(logging.DEBUG)
+if(len(log.handlers)==0):
+  handler = logging.handlers.RotatingFileHandler(LOG_FILENAME)
+  formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+  handler.setFormatter(formatter)
+  log.addHandler(handler)
 
 ######################
 ## Motor Establishment
@@ -42,14 +58,21 @@ def update_parameters():
   redirect(URL('dashboard'))
 
 def receive():
+  r = str(random.random())
   try:
-    command_dictionary[int(request.vars['key'])](request.vars['command'])
+    if int(request.vars['key']) in keys:
+      log.debug("TRY START"+r+" "+str(random.random()))
+      command_dictionary[int(request.vars['key'])](request.vars['command'])
+      log.debug("TRY FINISH"+r+" "+str(random.random()))
     return RPL.analogRead(0)
-  except:
+  except Exception as e:
+    log.debug("EXCEPT START"+" "+e)
     forward('stop')
     return RPL.analogRead(0)
   else:
+    log.debug("ELSE START"+r+" "+str(random.random()))
     forward('stop')
+    log.debug("ELSE START"+r+" "+str(random.random()))
     return RPL.analogRead(0)
 
 def sensor():
@@ -141,6 +164,7 @@ def backward_left(dir):
     RPL.pwmWrite(motorR,1500,freq)
 
 command_dictionary = dict([(87,forward),(83,reverse),(68,right),(65,left),(69,forward_right),(81,forward_left),(67,backward_right),(90,backward_left)])
+keys = list(command_dictionary.keys())
 # 87:w, 83:s, 68:d, 65:a, 69:e, 81:q, 90:z, 67:c
 # Each entry in this dictionary of the format (number, command_name) references the commands in the Individual commands section. The commands will get either 'go' or 'stop' from the receive function at the top of this document.
 # The numeric keys are the letters returned from javascript. You can view key presses by opening the javascript console in the web browser.
