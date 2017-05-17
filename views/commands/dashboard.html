@@ -22,7 +22,7 @@
 
     <!-- Page header -->
     <h1>BSM Robot Controller</h1>
-    <input type="hidden" id="last-call" value="0.000" />
+    <input type="hidden" id="last-call" value="0" />
 
     <!-- Navigation tabs -->
     <ul class="nav nav-tabs">
@@ -56,6 +56,11 @@
               </div>
               <div class="panel-body">
                 <p>You can use the qwe,asd,zc keys to drive.</p>
+                <p>
+                  Command interval (ms)
+                  <input type="number" id="command-frequency" value="150" />
+                  (If the robot locks up, try setting this to 250, or even 500.)
+                </p>
                 <div style="text-align: center; font-family: 'Courier New', 'Courier', 'monospace'; font-size: 24pt">
                   <div class="row">
                     <div class="col-md-1"><span class="label label-primary">q</span></div>
@@ -244,10 +249,9 @@
 
   ajax_direction = function(command, key){
     var dt = new Date();
-    var secs = (dt.getSeconds() + dt.getMilliseconds()/1000) % 60;
+    var ms = (dt.getSeconds()*1000 + dt.getMilliseconds());
     var last_call = jQuery('#last-call');
-    if(secs - last_call.val() > 0.25 || last_call.val() > secs){
-      last_call.val(secs);
+    if(ms - last_call.val() > jQuery('#command-frequency').val() || last_call.val() > ms){
       jQuery.ajax({
         url: '{{=forward}}',
         data: {key: key, command: command},
@@ -258,6 +262,7 @@
         failure: function(data){alert("please wait");}
       });
     }
+    last_call.val(ms);
   }
 
   ajax_sensor = function(pin){

@@ -62,7 +62,7 @@ def receive():
       command_dictionary[int(request.vars['key'])](request.vars['command'])
       log.debug("TRY FINISH"+r+" "+str(random.random()))
     return RPL.analogRead(0)
-  except Exception, e:
+  except Exception as e:
     log.debug("EXCEPT START"+" "+e)
     forward('stop')
     return RPL.analogRead(0)
