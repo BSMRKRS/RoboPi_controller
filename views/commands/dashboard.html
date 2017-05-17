@@ -22,6 +22,7 @@
 
     <!-- Page header -->
     <h1>BSM Robot Controller</h1>
+    <input type="hidden" id="last-call" value="0.000" />
 
     <!-- Navigation tabs -->
     <ul class="nav nav-tabs">
@@ -242,15 +243,21 @@
   }
 
   ajax_direction = function(command, key){
-    jQuery.ajax({
-      url: '{{=forward}}',
-      data: {key: key, command: command},
-      method: 'get',
-      success: function(data){
-        jQuery('#sensor_reading0').html(data);
-      },
-      failure: function(data){alert("please wait");}
-    });
+    var dt = new Date();
+    var secs = (dt.getSeconds() + dt.getMilliseconds()/1000) % 60;
+    var last_call = jQuery('#last-call');
+    if(secs - last_call.val() > 0.25 || last_call.val() > secs){
+      last_call.val(secs);
+      jQuery.ajax({
+        url: '{{=forward}}',
+        data: {key: key, command: command},
+        method: 'get',
+        success: function(data){
+          jQuery('#sensor_reading0').html(data);
+        },
+        failure: function(data){alert("please wait");}
+      });
+    }
   }
 
   ajax_sensor = function(pin){

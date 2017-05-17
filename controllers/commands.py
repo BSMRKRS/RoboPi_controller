@@ -14,7 +14,7 @@ import random
 ################
 
 LOG_FILENAME = '/home/student/web2py/logs/logging_rotatingfile_example.out'
-log = logging.getLogger('MyLogger')
+log = logging.getLogger('RoboPi_controller')
 log.setLevel(logging.DEBUG)
 if(len(log.handlers)==0):
   handler = logging.handlers.RotatingFileHandler(LOG_FILENAME)
@@ -57,9 +57,10 @@ def update_parameters():
 def receive():
   r = str(random.random())
   try:
-    log.debug("TRY START"+r+" "+str(random.random()))
-    command_dictionary[int(request.vars['key'])](request.vars['command'])
-    log.debug("TRY FINISH"+r+" "+str(random.random()))
+    if int(request.vars['key']) in keys:
+      log.debug("TRY START"+r+" "+str(random.random()))
+      command_dictionary[int(request.vars['key'])](request.vars['command'])
+      log.debug("TRY FINISH"+r+" "+str(random.random()))
     return RPL.analogRead(0)
   except Exception, e:
     log.debug("EXCEPT START"+" "+e)
@@ -160,6 +161,7 @@ def backward_left(dir):
     RPL.servoWrite(motorR,0)
 
 command_dictionary = dict([(87,forward),(83,reverse),(68,right),(65,left),(69,forward_right),(81,forward_left),(67,backward_right),(90,backward_left)])
+keys = list(command_dictionary.keys())
 # 87:w, 83:s, 68:d, 65:a, 69:e, 81:q, 90:z, 67:c
 # Each entry in this dictionary of the format (number, command_name) references the commands in the Individual commands section. The commands will get either 'go' or 'stop' from the receive function at the top of this document.
 # The numeric keys are the letters returned from javascript. You can view key presses by opening the javascript console in the web browser.
