@@ -2,9 +2,25 @@
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
 import xml.etree.ElementTree as ET
 import RoboPiLib as RPL
+RPL.RoboPiInit("/dev/ttyAMA0",115200)
 import time as time
 import os
-RPL.RoboPiInit("/dev/ttyAMA0",115200)
+import logging
+import logging.handlers
+import random
+
+################
+## Logging Setup
+################
+
+LOG_FILENAME = '/home/student/web2py/logs/logging_rotatingfile_example.out'
+log = logging.getLogger('MyLogger')
+log.setLevel(logging.DEBUG)
+if(len(log.handlers)==0):
+  handler = logging.handlers.RotatingFileHandler(LOG_FILENAME)
+  formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+  handler.setFormatter(formatter)
+  log.addHandler(handler)
 
 ######################
 ## Motor Establishment
@@ -39,14 +55,20 @@ def update_parameters():
   redirect(URL('dashboard'))
 
 def receive():
+  r = str(random.random())
   try:
+    log.debug("TRY START"+r+" "+str(random.random()))
     command_dictionary[int(request.vars['key'])](request.vars['command'])
+    log.debug("TRY FINISH"+r+" "+str(random.random()))
     return RPL.analogRead(0)
-  except:
+  except Exception, e:
+    log.debug("EXCEPT START"+" "+e)
     forward('stop')
     return RPL.analogRead(0)
   else:
+    log.debug("ELSE START"+r+" "+str(random.random()))
     forward('stop')
+    log.debug("ELSE START"+r+" "+str(random.random()))
     return RPL.analogRead(0)
 
 def sensor():
