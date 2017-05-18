@@ -74,7 +74,8 @@ def receive():
 
 def sensor():
   try:
-    return RPL.analogRead(int(request.vars['pin']))
+    return RPL.analogRead(0)
+    #return RPL.analogRead(int(request.vars['pin']))
   except Exception as e:
     return(e)
   else:

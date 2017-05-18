@@ -113,7 +113,13 @@
                   <p>Left Proximity Sensor Reading: XYZ</p>
 		  <h2>Sensor Reading</h2>
 		  <p>
-		    Pin 0:
+        <span>
+          Automatically collect readings on Pin 0
+          <input type='checkbox' checked='true' id="auto-read0"/>
+        </span>
+        <span>
+          | Value: 
+        </span>
 		    <span id="sensor_reading0"></span>
 		  </p>
                 </div>
@@ -252,6 +258,7 @@
     var ms = (dt.getSeconds()*1000 + dt.getMilliseconds());
     var last_call = jQuery('#last-call');
     if(ms - last_call.val() > jQuery('#command-frequency').val() || last_call.val() > ms){
+      jQuery('#auto-read0').attr('checked',false);
       jQuery.ajax({
         url: '{{=forward}}',
         data: {key: key, command: command},
@@ -265,21 +272,31 @@
     last_call.val(ms);
   }
 
-  ajax_sensor = function(pin){
-    jQuery.ajax({
-      url: '{{=sensor}}',
-      data: {pin: pin},
-      method: 'get',
-      success: function(data){
-        jQuery('#sensor_reading'+pin).html(data);
-	setTimeout(function(){ajax_sensor(0);},500);
-      },
-      failure: function(data){}
-    });
+  ajax_sensor = function(){
+    if(jQuery('#auto-read0').is(':checked')){
+      jQuery.ajax({
+        url: '{{=sensor}}',
+        data: {pin: 0},
+        method: 'get',
+        success: function(data){
+          jQuery('#sensor_reading0').html(data);
+        },
+        failure: function(data){}
+      });
+    } else {
+      var dt = new Date();
+      var ms = (dt.getSeconds()*1000 + dt.getMilliseconds());
+      var last_call = jQuery('#last-call').val();
+      if(ms - last_call > 5000 || last_call > ms){
+        jQuery('#auto-read0').prop('checked',true);
+      } else {
+      }
+    }
   }
 
 
   $(document).ready(function(){
     establish_control_keys();
+    window.setInterval(ajax_sensor,500);
   });
 </script>
