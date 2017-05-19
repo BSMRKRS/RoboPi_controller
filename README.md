@@ -6,6 +6,16 @@ I hope you enjoy working with the BSMRKRS Direct Robot Contol System. The DRCS o
 
 The server should start when you power up your BSMRKRS. Navigate to https://172.21.100.XX:8000/RoboPi_controller/commands/dashboard. Click on the web page to ensure that your computer is focused on the dashboard (so that key presses are captured correctly) and start driving! If this doesn't work, the most likely issue is that your computer is not on the same wireless network as your robot.
 
+# Updating the Code on Your Robot
+
+You can pull\* the latest version of this code onto your robot any time. SSH into your robot, enter the RoboPi_controller directory (at /home/student/web2py/applications/RoboPi_controller) and type `git pull origin master`.
+
+It may complain that your local files are modified and it can't pull until you commit\* them. Often you can just delete these files -- common deletable files are `__init__.pyc` and `modules/__init__.pyc`; deleting these files is fine. If other files are getting in the way, take care (and maybe ask for help) when deleting them.
+
+If you've modified files in the RoboPi_controller directory, pulling might overwrite your changes. If you're worried about this, checkout\* a new branch\* of your code before pulling from master, then you will have a access to your changes for sure.
+
+\* The words 'pull', 'commit', and 'branch' are git terms. The web has a lot of advice about how to use git if you're curious.
+
 # Modifying Your Local Code
 
 SSH allows you to access one computer from another. You can SSH into your pi by opening a terminal on your laptop, joining the Robo network, and typing `ssh student@172.21.100.XX`. You'll then enter the password for the Student login.
