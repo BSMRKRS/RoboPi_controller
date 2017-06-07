@@ -1,1 +1,1 @@
-<commands motorL_backward="2500" motorL_forward="500" motorR_backward="500" motorR_forward="2500" />
+<commands motorL_backward="1800" motorL_forward="1200" motorR_backward="1200" motorR_forward="1800" />

@@ -29,11 +29,17 @@ if(len(log.handlers)==0):
 freq = 3000
 motorL = 0
 motorR = 1
+servo1 = 2
+servo2 = 3
+servo3 = 4
 try:
   RPL.pinMode(motorL,RPL.PWM)
   RPL.pwmWrite(motorL,1500,freq)
   RPL.pinMode(motorR,RPL.PWM)
   RPL.pwmWrite(motorR,1500,freq)
+  RPL.pinMode(servo1,RPL.SERVO)
+  RPL.pinMode(servo2,RPL.SERVO)
+  RPL.pinMode(servo3,RPL.SERVO)
 except:
   pass
 
@@ -163,8 +169,53 @@ def backward_left(dir):
     RPL.pwmWrite(motorL,1500,freq)
     RPL.pwmWrite(motorR,1500,freq)
 
-command_dictionary = dict([(87,forward),(83,reverse),(68,right),(65,left),(69,forward_right),(81,forward_left),(67,backward_right),(90,backward_left)])
+def servo1up(dir):
+  if(dir=='go'):
+    RPL.servoWrite(servo1,2400)
+  else:
+    RPL.servoWrite(servo1,1500)
+    RPL.servoWrite(servo2,1500)
+    RPL.servoWrite(servo3,1500)
+def servo1down(dir):
+  if(dir=='go'):
+    RPL.servoWrite(servo1,600)
+  else:
+    RPL.servoWrite(servo1,1500)
+    RPL.servoWrite(servo2,1500)
+    RPL.servoWrite(servo3,1500)
+
+def servo2up(dir):
+  if(dir=='go'):
+    RPL.servoWrite(servo2,2500)
+  else:
+    RPL.servoWrite(servo1,1500)
+    RPL.servoWrite(servo2,1500)
+    RPL.servoWrite(servo3,1500)
+def servo2down(dir):
+  if(dir=='go'):
+    RPL.servoWrite(servo2,500)
+  else:
+    RPL.servoWrite(servo1,1500)
+    RPL.servoWrite(servo2,1500)
+    RPL.servoWrite(servo3,1500)
+
+def servo3up(dir):
+  if(dir=='go'):
+    RPL.servoWrite(servo3,2500)
+  else:
+    RPL.servoWrite(servo1,1500)
+    RPL.servoWrite(servo2,1500)
+    RPL.servoWrite(servo3,1500)
+def servo3down(dir):
+  if(dir=='go'):
+    RPL.servoWrite(servo3,500)
+  else:
+    RPL.servoWrite(servo1,1500)
+    RPL.servoWrite(servo2,1500)
+    RPL.servoWrite(servo3,1500)
+
+command_dictionary = dict([(87,forward),(83,reverse),(68,right),(65,left),(69,forward_right),(81,forward_left),(67,backward_right),(90,backward_left),(74,servo1down),(85,servo1up),(75,servo2down),(73,servo2up),(76,servo3down),(79,servo3up)])
 keys = list(command_dictionary.keys())
-# 87:w, 83:s, 68:d, 65:a, 69:e, 81:q, 90:z, 67:c
+# 87:w, 83:s, 68:d, 65:a, 69:e, 81:q, 90:z, 67:c, 74: j, 85: u, 73: i, 75: k, 79: o, 76: l
 # Each entry in this dictionary of the format (number, command_name) references the commands in the Individual commands section. The commands will get either 'go' or 'stop' from the receive function at the top of this document.
 # The numeric keys are the letters returned from javascript. You can view key presses by opening the javascript console in the web browser.
