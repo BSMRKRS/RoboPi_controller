@@ -1,4 +1,5 @@
 *.sw*
 *.py~
-*__init__.pyc
+__init__.pyc
+modules/__init__.pyc
 errors/*
