@@ -5,31 +5,9 @@ import RoboPiLib_pwm as RPL
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 import time as time
 import os
-import logging
-import logging.handlers
 import random
-from math import cos
-from math import sin
-from math import degrees
-from math import radians
-from math import fabs
-import pickle
-
 
 import sys, tty, termios, select, time, signal
-#creates array (technically, python list) of all 5000 points accsessible by the arm)
-point = 0
-
-with open("theMasterList.py","rb") as fp:    masterList = pickle.load(fp)
-
-LOG_FILENAME = '/home/student/web2py/logs/logging_rotatingfile_example.out'
-log = logging.getLogger('RoboPi_controller')
-log.setLevel(logging.DEBUG)
-if(len(log.handlers)==0):
-  handler = logging.handlers.RotatingFileHandler(LOG_FILENAME)
-  formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-  handler.setFormatter(formatter)
-  log.addHandler(handler)
 
 ######################
 ## Motor Establishment
@@ -157,220 +135,15 @@ def elbow_down():
     RPL.digitalWrite(elbow_dir, 1)
     RPL.pwmWrite(elbow_pulse, 200, 400)
 
-#takes current position, and makes a list of all points accsessible by the arm within a certain vertical tolerance (currently 0.1 in, but this can be changed)
-def planeX():
-    yInPlane = []
-    readout = []
-    global masterListPosition
-    position = masterList[masterListPosition]
-    for i in range(len(masterList)):
-        if fabs(position[1] - masterList[i][1]) <= 0.1:
-            deltaShoulder = masterList[i][2] - position[2]
-            deltaElbow = masterList[i][3] - position[3]
-            yInPlane.append([masterList[i][0],masterList[i][1],deltaShoulder,deltaElbow,i])
-            yInPlane.sort()
-    for i in range(len(yInPlane)):
-        if yInPlane[i][4] == masterListPosition:
-            global point
-            point = i
-            print "-" * 10
-            print yInPlane[i]
-            print "-" * 10
-        else:
-            print yInPlane[i]
-    print len(yInPlane)
-    return yInPlane
-
-def planeY():
-    xInPlane = []
-    readout = []
-    global masterListPosition
-    position = masterList[masterListPosition]
-    for i in range(len(masterList)):
-        if fabs(position[0] - masterList[i][0]) <= 0.1:
-            deltaShoulder = masterList[i][2] - position[2]
-            deltaElbow = masterList[i][3] - position[3]
-            xInPlane.append([masterList[i][1],masterList[i][0],deltaShoulder,deltaElbow,i])
-            xInPlane.sort()
-    for i in range(len(xInPlane)):
-        if xInPlane[i][2] == 0 and xInPlane[i][3] == 0:
-            global point
-            point = i
-            masterListPosition = xInPlane[i][4]
-            print "-" * 10
-            print xInPlane[i]
-            print "-" * 10
-        else:
-            print xInPlane[i]
-    print len(xInPlane)
-    return xInPlane
-
-
-shoulderStepTest = 0
-elbowStepTest = 0
-
-
-def shoulderPulse(direction):
-    RPL.digitalWrite(12,direction)
-    RPL.pinMode(13,RPL.OUTPUT)
-    RPL.digitalWrite(13,0)
-    RPL.digitalWrite(13,1)
-    RPL.digitalWrite(13,0)
-    global shoulderStepTest
-    global shoulderStep
-    if direction == 1:
-        shoulderStepTest += 1
-        shoulderStep += 1
-
-    else:
-        shoulderStepTest -= 1
-        shoulderStep -= 1
-
-def elbowPulse(direction):
-    RPL.digitalWrite(6,direction)
-    RPL.pinMode(7,RPL.OUTPUT)
-    RPL.digitalWrite(7,0)
-    RPL.digitalWrite(7,1)
-    RPL.digitalWrite(7,0)
-    global elbowStepTest
-    global elbowStep
-    if direction == 1:
-        elbowStepTest += 1
-        elbowStep += 1
-    else:
-        elbowStepTest -= 1
-        elbowStep -= 1
-def calibrate():
-    shoulderStep = 0
-    elbowStep = 0
-    for i in range(201):
-        shoulderPulse(1)
-    for k in range(1593):
-        elbowPulse(1)
-    global masterListPosition
-    masterListPosition = 3040
-def debugSetup():
-    for i in range(len(masterList)):
-        if masterList[i][2] == 201 and masterList[i][3] == 1593:
-            print i
-
-def moveXforward():
-    yInPlane = planeX()
-    global shoulderStepTest
-    global elbowStepTest
-    shoulderStepTest = 0
-    elbowStepTest = 0
-    print point
-    if yInPlane[point+1][2] >= 0:
-        for i in range(int(fabs(yInPlane[point+1][2]))):
-            shoulderPulse(1)
-    else:
-        for i in range(int(fabs(yInPlane[point+1][2]))):
-            shoulderPulse(0)
-
-    if yInPlane[point+1][3] >= 0:
-        for i in range(int(fabs(yInPlane[point+1][3]))):
-            elbowPulse(1)
-    else:
-        for i in range(int(fabs(yInPlane[point+1][3]))):
-            elbowPulse(0)
-    global masterListPosition
-    masterListPosition = yInPlane[point + 1][4]
-    print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
-    print masterList[masterListPosition]
-    print point
-
-def moveXbackward():
-    yInPlane = planeX()
-    global shoulderStepTest
-    global elbowStepTest
-    shoulderStepTest = 0
-    elbowStepTest = 0
-    if yInPlane[point-1][2] >= 0:
-        for i in range(int(fabs(yInPlane[point-1][2]))):
-            shoulderPulse(1)
-    else:
-        for i in range(int(fabs(yInPlane[point-1][2]))):
-            shoulderPulse(0)
-
-    if yInPlane[point-1][3] >= 0:
-        for i in range(int(fabs(yInPlane[point-1][3]))):
-            elbowPulse(1)
-    else:
-        for i in range(int(fabs(yInPlane[point-1][3]))):
-            elbowPulse(0)
-    global masterListPosition
-    masterListPosition = yInPlane[point - 1][4]
-    print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
-    print masterList[masterListPosition]
-    print point
-
-
-def moveYupward():
-    xInPlane = planeY()
-    global shoulderStepTest
-    global elbowStepTest
-    shoulderStepTest = 0
-    elbowStepTest = 0
-    print point
-    if xInPlane[point+1][2] >= 0:
-        for i in range(int(fabs(xInPlane[point+1][2]))):
-            shoulderPulse(1)
-    else:
-        for i in range(int(fabs(xInPlane[point+1][2]))):
-            shoulderPulse(0)
-
-    if xInPlane[point+1][3] >= 0:
-        for i in range(int(fabs(xInPlane[point+1][3]))):
-            elbowPulse(1)
-    else:
-        for i in range(int(fabs(xInPlane[point+1][3]))):
-            elbowPulse(0)
-    global masterListPosition
-    masterListPosition = xInPlane[point + 1][4]
-    print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
-    print masterList[masterListPosition]
-    print point
-
-
-def moveYdownward():
-    xInPlane = planeY()
-    global shoulderStepTest
-    global elbowStepTest
-    shoulderStepTest = 0
-    elbowStepTest = 0
-    if xInPlane[point-1][2] >= 0:
-        for i in range(int(fabs(xInPlane[point-1][2]))):
-            shoulderPulse(1)
-    else:
-        for i in range(int(fabs(xInPlane[point-1][2]))):
-            shoulderPulse(0)
-
-    if xInPlane[point-1][3] >= 0:
-        for i in range(int(fabs(xInPlane[point-1][3]))):
-            elbowPulse(1)
-    else:
-        for i in range(int(fabs(xInPlane[point-1][3]))):
-            elbowPulse(0)
-    global masterListPosition
-    masterListPosition = xInPlane[point - 1][4]
-    print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
-    print masterList[masterListPosition]
-    print point
-
 
 command_dictionary = dict([(87,forward),(83,reverse),(68,right),(65,left),(69,forward_right),(81,forward_left),(67,backward_right),(90,backward_left),(74,servo1down),(85,servo1up),(75,servo2down),(73,servo2up),(76,servo3down),(79,servo3up), (84,shoulder_up), (71, shoulder_down), (89, elbow_up), (72, elbow_down)])
 keys = list(command_dictionary.keys())
 # 87:w, 83:s, 68:d, 65:a, 69:e, 81:q, 90:z, 67:c, 74: j, 85: u, 73: i, 75: k, 79: o, 76: l, 84: t, 71: g
 
-masterListPosition = 0
-shoulderStep = 0
-elbowStep = 0
 SHORT_TIMEOUT = 0.2 # number of seconds your want for timeout
 
 fd = sys.stdin.fileno() # I don't know what this does
 old_settings = termios.tcgetattr(fd) # this records the existing console settings that are later changed with the tty.setraw... line so that they can be replaced when the loop ends
-
 
 ######################################
 ## Other motor commands should go here
@@ -420,25 +193,5 @@ while True:
         servo3up()
     elif ch == "l":
         servo3down()
-    elif ch == "v":
-        moveXbackward()
-    elif ch == "b":
-        moveXforward()
-    elif ch == "n":
-        moveYupward()
-    elif ch == "m":
-        moveYdownward()
-    elif ch == "c":
-        calibrate()
     else:
         stopAll()
-
-################
-## Logging Setup
-################
-
-
-def manControl():
-	input == raw_input()
-# Each entry in this dictionary of the format (number, command_name) references the commands in the Individual commands section. The commands will get either 'go' or 'stop' from the receive function at the top of this document.
-# The numeric keys are the letters returned from javascript. You can view key presses by opening the javascript console in the web browser.
