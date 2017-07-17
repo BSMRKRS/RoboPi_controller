@@ -25,6 +25,7 @@ if(len(log.handlers)==0):
 ######################
 ## Motor Establishment
 ######################
+#pins 2-5 do not work
 
 freq = 3000
 motorL = 0
@@ -32,10 +33,10 @@ motorR = 1
 servo1 = 8 # Wrist Pitch
 servo2 = 9 # Wrist Roll
 servo3 = 10 # Grabber
-elbow_dir = 3
-elbow_pulse = 5
-shoulder_dir = 6
-shoulder_pulse = 7
+elbow_dir = 6 # Original:3
+elbow_pulse = 7 # Original:5
+shoulder_dir = 12  # Original 6
+shoulder_pulse = 13 # Original:7
 
 try:
   RPL.pinMode(motorL,RPL.PWM)
@@ -47,10 +48,10 @@ try:
   RPL.pinMode(servo3,RPL.SERVO)
   RPL.pinMode(elbow_dir,RPL.OUTPUT)
   RPL.pinMode(elbow_pulse,RPL.PWM)
-  RPL.pwmWrite(elbow_pulse,0, 1000)
+  RPL.pwmWrite(elbow_pulse,0, 500)
   RPL.pinMode(shoulder_dir,RPL.OUTPUT)
   RPL.pinMode(shoulder_pulse,RPL.PWM)
-  RPL.pwmWrite(shoulder_pulse,0, 1000)
+  RPL.pwmWrite(shoulder_pulse,0, 500)
 except:
   pass
 
@@ -183,11 +184,17 @@ def backward_left(dir):
 def servo1up(dir): # Wrist pitch
   if(dir=='go'):
     a = RPL.servoRead(servo1)
-    RPL.servoWrite(servo1,min(a + 50, 2400))
+    if a > 2400:
+       RPL.servoWrite(servo1,1700)
+    else:
+       RPL.servoWrite(servo1,min( a + 100, 2400))
 def servo1down(dir):
   if(dir=='go'):
     a = RPL.servoRead(servo1)
-    RPL.servoWrite(servo1,max(600, a - 50))
+    if a < 600:
+       RPL.servoWrite(servo1, 1700)
+    else:
+       RPL.servoWrite(servo1,max( a - 100, 600))
 
 def servo2up(dir):
   if(dir=='go'):
