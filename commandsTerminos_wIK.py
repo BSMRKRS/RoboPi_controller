@@ -1,4 +1,3 @@
-# python web2py.py -c server.crt -k server.key -a 'Engineering1!' -i 0.0.0.0 -p 8000
 # Kirwin's vi tab preferences: set shiftwidth=2 softtabstop=2 expandtab
 import xml.etree.ElementTree as ET
 import RoboPiLib_pwm as RPL
@@ -210,43 +209,40 @@ shoulderStepTest = 0
 elbowStepTest = 0
 
 
-def shoulderPulse(direction):
-    RPL.digitalWrite(12,direction)
-    RPL.pinMode(13,RPL.OUTPUT)
-    RPL.digitalWrite(13,0)
-    RPL.digitalWrite(13,1)
-    RPL.digitalWrite(13,0)
+def shoulderPulse(pulseNumber,direction):
+    RPL.digitalWrite(12, direction)
+    RPL.servoWrite(13,250,500)
+    time.sleep(0.0005 * pulseNumber)
+    RPL.servoWrite(13,0,0)
     global shoulderStepTest
     global shoulderStep
     if direction == 1:
-        shoulderStepTest += 1
-        shoulderStep += 1
+        shoulderStepTest += pulseNumber
+        shoulderStep += pulseNumber
 
     else:
-        shoulderStepTest -= 1
-        shoulderStep -= 1
+        shoulderStepTest -= pulseNumber
+        shoulderStep -= pulseNumber
 
-def elbowPulse(direction):
-    RPL.digitalWrite(6,direction)
-    RPL.pinMode(7,RPL.OUTPUT)
-    RPL.digitalWrite(7,0)
-    RPL.digitalWrite(7,1)
-    RPL.digitalWrite(7,0)
+def elbowPulse(pulseNumber, direction):
+    RPL.digitalWrite(6, direction)
+    RPL.servoWrite(7,250,500)
+    time.sleep(0.0005 * pulseNumber)
+    RPL.servoWrite(13,0,0)
     global elbowStepTest
     global elbowStep
     if direction == 1:
-        elbowStepTest += 1
-        elbowStep += 1
+        elbowStepTest += pulseNumber
+        elbowStep += pulseNumber
+
     else:
-        elbowStepTest -= 1
-        elbowStep -= 1
+        elbowStepTest -= pulseNumber
+        elbowStep -= pulseNumber
 def calibrate():
     shoulderStep = 0
     elbowStep = 0
-    for i in range(201):
-        shoulderPulse(1)
-    for k in range(1593):
-        elbowPulse(1)
+    shoulderPulse(201,1)
+    elbowPulse(1593,1)
     global masterListPosition
     masterListPosition = 3040
 def debugSetup():
@@ -262,18 +258,14 @@ def moveXforward():
     elbowStepTest = 0
     print point
     if yInPlane[point+1][2] >= 0:
-        for i in range(int(fabs(yInPlane[point+1][2]))):
-            shoulderPulse(1)
+        shoulderPulse(int(fabs(yInPlane[point+1][2]),1))
     else:
-        for i in range(int(fabs(yInPlane[point+1][2]))):
-            shoulderPulse(0)
+        shoulderPulse(int(fabs(yInPlane[point+1][2]),0))
 
     if yInPlane[point+1][3] >= 0:
-        for i in range(int(fabs(yInPlane[point+1][3]))):
-            elbowPulse(1)
+        elbowPulse(int(fabs(yInPlane[point+1][3]),1))
     else:
-        for i in range(int(fabs(yInPlane[point+1][3]))):
-            elbowPulse(0)
+        elbowPulse(int(fabs(yInPlane[point+1][3]),0))
     global masterListPosition
     masterListPosition = yInPlane[point + 1][4]
     print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
@@ -286,19 +278,15 @@ def moveXbackward():
     global elbowStepTest
     shoulderStepTest = 0
     elbowStepTest = 0
-    if yInPlane[point-1][2] >= 0:
-        for i in range(int(fabs(yInPlane[point-1][2]))):
-            shoulderPulse(1)
+    if yInPlane[point+1][2] >= 0:
+        shoulderPulse(int(fabs(yInPlane[point-1][2]),1))
     else:
-        for i in range(int(fabs(yInPlane[point-1][2]))):
-            shoulderPulse(0)
+        shoulderPulse(int(fabs(yInPlane[point-1][2]),0))
 
-    if yInPlane[point-1][3] >= 0:
-        for i in range(int(fabs(yInPlane[point-1][3]))):
-            elbowPulse(1)
+    if yInPlane[point+1][3] >= 0:
+        elbowPulse(int(fabs(yInPlane[point-1][3]),1))
     else:
-        for i in range(int(fabs(yInPlane[point-1][3]))):
-            elbowPulse(0)
+        elbowPulse(int(fabs(yInPlane[point-1][3]),0))
     global masterListPosition
     masterListPosition = yInPlane[point - 1][4]
     print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
@@ -314,18 +302,14 @@ def moveYupward():
     elbowStepTest = 0
     print point
     if xInPlane[point+1][2] >= 0:
-        for i in range(int(fabs(xInPlane[point+1][2]))):
-            shoulderPulse(1)
+        shoulderPulse(int(fabs(xInPlane[point+1][2]),1))
     else:
-        for i in range(int(fabs(xInPlane[point+1][2]))):
-            shoulderPulse(0)
+        shoulderPulse(int(fabs(xInPlane[point+1][2]),0))
 
     if xInPlane[point+1][3] >= 0:
-        for i in range(int(fabs(xInPlane[point+1][3]))):
-            elbowPulse(1)
+        elbowPulse(int(fabs(xInPlane[point+1][3]),1))
     else:
-        for i in range(int(fabs(xInPlane[point+1][3]))):
-            elbowPulse(0)
+        elbowPulse(int(fabs(xInPlane[point+1][3]),0))
     global masterListPosition
     masterListPosition = xInPlane[point + 1][4]
     print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)
@@ -339,19 +323,15 @@ def moveYdownward():
     global elbowStepTest
     shoulderStepTest = 0
     elbowStepTest = 0
-    if xInPlane[point-1][2] >= 0:
-        for i in range(int(fabs(xInPlane[point-1][2]))):
-            shoulderPulse(1)
+    if xInPlane[point+1][2] >= 0:
+        shoulderPulse(int(fabs(xInPlane[point-1][2]),1))
     else:
-        for i in range(int(fabs(xInPlane[point-1][2]))):
-            shoulderPulse(0)
+        shoulderPulse(int(fabs(xInPlane[point-1][2]),0))
 
-    if xInPlane[point-1][3] >= 0:
-        for i in range(int(fabs(xInPlane[point-1][3]))):
-            elbowPulse(1)
+    if xInPlane[point+1][3] >= 0:
+        elbowPulse(int(fabs(xInPlane[point-1][3]),1))
     else:
-        for i in range(int(fabs(xInPlane[point-1][3]))):
-            elbowPulse(0)
+        elbowPulse(int(fabs(xInPlane[point-1][3]),0))
     global masterListPosition
     masterListPosition = xInPlane[point - 1][4]
     print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)

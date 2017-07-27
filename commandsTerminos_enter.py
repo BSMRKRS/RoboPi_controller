@@ -54,20 +54,16 @@ except:
 ######################
 def stopAll():
   try:
-    #time.sleep(0.1)
-    #print "stops both drive motors"
+    print "stops both drive motors"
     RPL.pwmWrite(motorL,1500, freq)
     RPL.pwmWrite(motorR,1500, freq)
-    #print "stops all wrist servos"
-    #time.sleep(0.1)
+    print "stops all wrist servos"
     RPL.servoWrite(servo2,1500)
-    #print "stop servo2"
-    #time.sleep(0.1)
+    print "stop servo2"
     RPL.servoWrite(servo3,1500)
-    #print "stop servo3"
+    print "stop servo3"
     #RPL.servoWrite(servo4,1500)
-    #time.sleep(0.1)
-    #print "stops shoulder and elbow"
+    print "stops shoulder and elbow"
     RPL.pwmWrite(shoulder_pulse, 0, 400)
     RPL.pwmWrite(elbow_pulse, 0, 400)
   except:
@@ -157,23 +153,13 @@ def speedUp():
   global motorR_forward
   global motorL_forward
   motorR_forward += 100
-  if(motorR_forward > freq):
-    motorR_forward = freq
   motorL_forward += 100
-  if(motorL_forward > freq):
-    motorL_forward = freq
-  print 'Right Motor: ', motorR_forward, ' Left Motor: ', motorL_forward, '\r'
 
 def speedDown():
   global motorR_forward
   global motorL_forward
   motorR_forward -= 100
   motorL_forward -= 100
-  if(motorR_forward < 0):
-    motorR_forward = 0
-  if(motorL_forward < 0):
-    motorL_forward = 0
-  print 'Right Motor: ', motorR_forward, ' Left Motor: ', motorL_forward, '\r'
 
 SHORT_TIMEOUT = 0.2 # number of seconds your want for timeout
 
@@ -183,25 +169,14 @@ old_settings = termios.tcgetattr(fd) # this records the existing console setting
 ######################################
 ## Other motor commands should go here
 ######################################
-
-def interrupted(signum, frame): # this is the method called at the end of the alarm
-  stopAll()
-
-signal.signal(signal.SIGALRM, interrupted) # this calls the 'interrupted' method when the alarm goes off
-tty.setraw(sys.stdin.fileno()) # this sets the style of the input
-
-while True:
-  signal.setitimer(signal.ITIMER_REAL,SHORT_TIMEOUT) # this sets the alarm
-  ch = sys.stdin.read(1) # this reads one character of input without requiring an enter keypress
-  signal.setitimer(signal.ITIMER_REAL,0) # this turns off the alarm
-  if ch == '*': # pressing the asterisk key kills the process
-    termios.tcsetattr(fd, termios.TCSADRAIN, old_settings) # this resets the console settings
-    break # this ends the loop
-  else:
+def ui():
+    ch = raw_input()   
     if ch == 'w':
       forward()
+   
     elif ch == "a":
       left()
+   
     elif ch == "s":
       reverse()
     elif ch == "d":
@@ -232,11 +207,14 @@ while True:
       servo3down()
     elif ch == "[":
       speedUp()
-    elif ch == "z":
-      backward_left()
-    elif ch == "c":
-      backward_right()
+   # elif ch == "z":
+    #  backward_left()
+   # elif ch == "c":
+     # backward_right()
+
     elif ch == "]":
       speedDown()
     else:
       stopAll()
+    ui()
+ui()
