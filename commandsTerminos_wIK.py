@@ -211,9 +211,9 @@ elbowStepTest = 0
 
 def shoulderPulse(pulseNumber,direction):
     RPL.digitalWrite(12, direction)
-    RPL.servoWrite(13,250,500)
+    RPL.pwmWrite(13,250,500)
     time.sleep(0.0005 * pulseNumber)
-    RPL.servoWrite(13,0,0)
+    RPL.pwmWrite(13,0,0)
     global shoulderStepTest
     global shoulderStep
     if direction == 1:
@@ -226,9 +226,9 @@ def shoulderPulse(pulseNumber,direction):
 
 def elbowPulse(pulseNumber, direction):
     RPL.digitalWrite(6, direction)
-    RPL.servoWrite(7,250,500)
+    RPL.pwmWrite(7,250,500)
     time.sleep(0.0005 * pulseNumber)
-    RPL.servoWrite(13,0,0)
+    RPL.pwmWrite(13,0,0)
     global elbowStepTest
     global elbowStep
     if direction == 1:
@@ -258,14 +258,14 @@ def moveXforward():
     elbowStepTest = 0
     print point
     if yInPlane[point+1][2] >= 0:
-        shoulderPulse(int(fabs(yInPlane[point+1][2]),1))
+        shoulderPulse(yInPlane[point+1][2],1)
     else:
-        shoulderPulse(int(fabs(yInPlane[point+1][2]),0))
+        shoulderPulse(yInPlane[point+1][2],0)
 
     if yInPlane[point+1][3] >= 0:
-        elbowPulse(int(fabs(yInPlane[point+1][3]),1))
+        elbowPulse(yInPlane[point+1][3],1)
     else:
-        elbowPulse(int(fabs(yInPlane[point+1][3]),0))
+        elbowPulse(yInPlane[point+1][3],0)
     global masterListPosition
     masterListPosition = yInPlane[point + 1][4]
     print "The shoulder moved %d steps and the elbow moved %d steps" % (shoulderStepTest, elbowStepTest)

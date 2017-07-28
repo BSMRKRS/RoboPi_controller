@@ -110,20 +110,24 @@ def servo1up(): # Wrist pitch
   a = RPL.servoRead(servo1)
   if a >= 2400:
     RPL.servoWrite(servo1,2400)
+    print  a
   else:
     RPL.servoWrite(servo1,min( a + servo1_step, 2400))
+    print  a
 def servo1down():
     a = RPL.servoRead(servo1)
     if a <= 600:
       RPL.servoWrite(servo1, 600)
     else:
       RPL.servoWrite(servo1,max( a - servo1_step, 600))
+    print a
 #wrist rotate: wiring problem?
 def servo2up():
   RPL.servoWrite(servo2,2500)
-
+  RPL.servoWrite(servo3,2000)
 def servo2down():
   RPL.servoWrite(servo2,500)
+  RPL.servoWrite(servo3,1000)
 #wrist grasp: working
 def servo3up():
   RPL.servoWrite(servo3,2500)
