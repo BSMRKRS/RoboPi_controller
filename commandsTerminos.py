@@ -21,6 +21,7 @@ servo1_step = 10
 servo2 = 9 # Wrist Roll
 servo3 = 10 # grabber
 servo4 = 14 # Front camera
+servo5 = 15 # Front camera
 elbow_dir = 6 # Original:3
 elbow_pulse = 7 # Original:5
 shoulder_dir = 12  # Original 6
@@ -41,6 +42,7 @@ try:
   RPL.pinMode(servo2,RPL.SERVO)
   RPL.pinMode(servo3,RPL.SERVO)
   RPL.pinMode(servo4,RPL.SERVO)
+  RPL.pinMode(servo5,RPL.SERVO)
   RPL.pinMode(elbow_dir,RPL.OUTPUT)
   RPL.pinMode(elbow_pulse,RPL.PWM)
   RPL.pwmWrite(elbow_pulse,0, 500)
@@ -54,20 +56,12 @@ except:
 ######################
 def stopAll():
   try:
-    #time.sleep(0.1)
-    #print "stops both drive motors"
     RPL.pwmWrite(motorL,1500, freq)
     RPL.pwmWrite(motorR,1500, freq)
-    #print "stops all wrist servos"
-    #time.sleep(0.1)
     RPL.servoWrite(servo2,1500)
-    #print "stop servo2"
-    #time.sleep(0.1)
     RPL.servoWrite(servo3,1500)
-    #print "stop servo3"
-    #RPL.servoWrite(servo4,1500)
-    #time.sleep(0.1)
-    #print "stops shoulder and elbow"
+    RPL.servoWrite(servo4,1500)
+    RPL.servoWrite(servo5,1500)
     RPL.pwmWrite(shoulder_pulse, 0, 400)
     RPL.pwmWrite(elbow_pulse, 0, 400)
   except:
@@ -110,7 +104,7 @@ def servo1up(): # Wrist pitch
   a = RPL.servoRead(servo1)
   if a >= 2400:
     RPL.servoWrite(servo1,2400)
-    print  a
+    print  'Wrist pitch: ', a
   else:
     RPL.servoWrite(servo1,min( a + servo1_step, 2400))
     print  a
@@ -120,7 +114,7 @@ def servo1down():
       RPL.servoWrite(servo1, 600)
     else:
       RPL.servoWrite(servo1,max( a - servo1_step, 600))
-    print a
+    print  'Wrist pitch: ', a
 #wrist rotate: wiring problem?
 def servo2up():
   RPL.servoWrite(servo2,2500)
@@ -136,10 +130,14 @@ def servo3down():
   RPL.servoWrite(servo3,500)
 
 def servo4up():
-  RPL.servoWrite(servo4, 2500)
-
+  RPL.servoWrite(servo4, 2000)
 def servo4down():
-  RPL.servoWrite(servo4, 500)
+  RPL.servoWrite(servo4, 1000)
+
+def servo5up():
+  RPL.servoWrite(servo5, 2000)
+def servo5down():
+  RPL.servoWrite(servo5, 1000)
 
 def shoulder_up():
   RPL.digitalWrite(shoulder_dir, 0)
@@ -157,27 +155,47 @@ def elbow_down():
   RPL.digitalWrite(elbow_dir, 1)
   RPL.pwmWrite(elbow_pulse, 400, 800)
 
-def speedUp():
+def forwardSpeedChanges(change, mn = 1600, mx = 2900):
   global motorR_forward
   global motorL_forward
-  motorR_forward += 100
-  if(motorR_forward > freq):
-    motorR_forward = freq
-  motorL_forward += 100
-  if(motorL_forward > freq):
-    motorL_forward = freq
-  print 'Right Motor: ', motorR_forward, ' Left Motor: ', motorL_forward, '\r'
+  motorR_forward += change
+  motorL_forward += change
+  motorR_forward = max(min(motorR_forward, mx), mn)
+  motorL_forward = max(min(motorL_forward, mx), mn)
+  print 'FORWARD: Left Motor: ', motorL_forward, ' Right Motor: ', motorR_forward, '\r'
 
-def speedDown():
+def backwardSpeedChanges(change, mn = 100, mx = 1400):
+  global motorR_backward
+  global motorL_backward
+  motorR_backward += change
+  motorL_backward += change
+  motorR_backward = max(min(motorR_backward, mx), mn)
+  motorL_backward = max(min(motorL_backward, mx), mn)
+  print 'BACKWARD: Left Motor: ', motorL_backward, ' Right Motor: ', motorR_backward, '\r'
+
+def backwardRightSpeedChange(change, mn = 100, mx = 1400):
+  global motorR_backward
+  motorR_backward += change
+  motorR_backward = max(min(motorR_backward, mx), mn)
+  print 'BACKWARD: Left Motor: ', motorL_backward, ' Right Motor: ', motorR_backward, '\r'
+
+def backwardLeftSpeedChange(change, mn = 100, mx = 1400):
+  global motorL_backward
+  motorL_backward += change
+  motorL_backward = max(min(motorL_backward, mx), mn)
+  print 'BACKWARD: Left Motor: ', motorL_backward, ' Right Motor: ', motorR_backward, '\r'
+
+def forwardRightSpeedChange(change, mn = 1600, mx = 2900):
   global motorR_forward
+  motorR_forward += change
+  motorR_forward = max(min(motorR_forward, mx), mn)
+  print 'FORWARD: Left Motor: ', motorL_forward, ' Right Motor: ', motorR_forward, '\r'
+
+def forwardLeftSpeedChange(change, mn = 1600, mx = 2900):
   global motorL_forward
-  motorR_forward -= 100
-  motorL_forward -= 100
-  if(motorR_forward < 0):
-    motorR_forward = 0
-  if(motorL_forward < 0):
-    motorL_forward = 0
-  print 'Right Motor: ', motorR_forward, ' Left Motor: ', motorL_forward, '\r'
+  motorL_forward += change
+  motorL_forward = max(min(motorL_forward, mx), mn)
+  print 'FORWARD: Left Motor: ', motorL_forward, ' Right Motor: ', motorR_forward, '\r'
 
 SHORT_TIMEOUT = 0.2 # number of seconds your want for timeout
 
@@ -234,13 +252,41 @@ while True:
       servo3up()
     elif ch == "l":
       servo3down()
-    elif ch == "[":
-      speedUp()
+    elif ch == "m":
+      servo4up()
+    elif ch == "n":
+      servo4down()
+    elif ch == "b":
+      servo5up()
+    elif ch == "v":
+      servo5down()
     elif ch == "z":
       backward_left()
     elif ch == "c":
       backward_right()
     elif ch == "]":
-      speedDown()
+      forwardSpeedChanges(100)
+    elif ch == "[":
+      backwardSpeedChanges(-100)
+    elif ch == "}":
+      forwardSpeedChanges(-100)
+    elif ch == "{":
+      backwardSpeedChanges(100)
+    elif ch == "1":
+      forwardLeftSpeedChange(100)
+    elif ch == "!":
+      forwardLeftSpeedChange(-100)
+    elif ch == "2":
+      forwardRightSpeedChange(100)
+    elif ch == "@":
+      forwardRightSpeedChange(-100)
+    elif ch == "3":
+      backwardLeftSpeedChange(-100)
+    elif ch == "#":
+      backwardLeftSpeedChange(100)
+    elif ch == "4":
+      backwardRightSpeedChange(-100)
+    elif ch == "$":
+      backwardRightSpeedChange(100)
     else:
       stopAll()
