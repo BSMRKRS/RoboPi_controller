@@ -11,5 +11,7 @@ RPL.pinMode(ledPin,OUTPUT)
 #commands
 def blink():
     RPL.digitalWrite(ledPin,1)
+    print "led ON"
     time.sleep(2)
     RPL.digitalWrite(ledPin,0)
+    print "led OFF"
