@@ -4,7 +4,8 @@ RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 #pins
 ledPin = 1
-RPL.pinMode(ledPin,OUTPUT)
+
+RPL.pinMode(ledPin,RPL.OUTPUT)
 
 
 
