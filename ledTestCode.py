@@ -13,8 +13,9 @@ RPL.pinMode(ledPin,RPL.OUTPUT)
 def blink():
     RPL.digitalWrite(ledPin,1)
     print "led ON"
-    time.sleep(2)
+    time.sleep(0.5)
     RPL.digitalWrite(ledPin,0)
     print "led OFF"
-
-blink()
+i = int(raw_input("How many times the light will blink>"))
+for n in range(i+1):
+    blink()
