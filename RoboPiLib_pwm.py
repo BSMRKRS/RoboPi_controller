@@ -94,7 +94,7 @@ def putPacket(cmd, buffr, plen):
 def getPacket():
 
   count=0
-  
+
   while (ser.read(1) != SOH):
     count = count+1
 
@@ -105,11 +105,11 @@ def getPacket():
   addr = header[0]
   cmd  = header[1]
   plen = header[2]
-  
+
 #  print "Header ", addr, cmd, plen
 
   checksum = addr + cmd + plen
-  
+
 
 #  print "b4"
   buf2 = bytearray(ser.read(plen))
@@ -128,8 +128,8 @@ def getPacket():
 
   while (ser.read(1) != EOT):
     count = count+1
-    
-#  print "Dropped ", count    
+
+#  print "Dropped ", count
 
   #          0    1     2     3    4
   return [addr, cmd, plen, buf2, chk]
@@ -304,8 +304,8 @@ def pulseGen(pin, dbg, stp, low_period, pls, pulse_list):
 #**********************************************************************************
 
 def pulseList(pin, low_period, pulse_list):
-  return pulseGen(pin, 33, 33, low_period, len(pulse_list), pulse_list)  
-  
+  return pulseGen(pin, 33, 33, low_period, len(pulse_list), pulse_list)
+
 #**********************************************************************************
 
 def pulseStop():

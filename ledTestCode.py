@@ -15,3 +15,5 @@ def blink():
     time.sleep(2)
     RPL.digitalWrite(ledPin,0)
     print "led OFF"
+
+blink()
