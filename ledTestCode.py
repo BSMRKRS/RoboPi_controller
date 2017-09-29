@@ -17,12 +17,14 @@ def blink():
     RPL.digitalWrite(ledPin,0)
     print "led OFF"
 i = int(raw_input("How many times the light will blink>"))
-for n in range(i+1):
-    blink()
+#for n in range(i+1):
+    #blink()
 
 def runServo():
-    RPL.servoWriteWRITE(ledPin,10)
+    RPL.servoWrite(ledPin,3000)
     print "led On"
+    print "motor On"
     time.sleep(2)
     RPL.servoWrite(ledPin,0)
+    print "motor and ledOff"
 runServo()
