@@ -135,4 +135,68 @@ In the more advanced usage, you can set the functionality of new keyboard button
       RPL.servoWrite(motor_pan,0)
   ```
 
+BSTART: plug everything into its corresponding connections 
+
+TO START CODE:
+1. connect to robo wifi 
+2. open terminal 
+3. type: ssh student@192.168.21.150 
+4. Password: Engineering!1
+5. cd RoboPi_controller 
+6. type python 
+
+PYTHON:
+1. type: Import stepper_control as SC
+2. type: SC. elbow 
+3. SC.elbow(True, 10, 200) **middle number is how many seconds you are running the code.  Second number is how fast it is, do not go any lower than 130!!
+
+C
+***True moves the arm up and False moves the arm down 
+B
+B
+B
+A
+A
+A
+A
+A
+A
+B
+B
+B
+B
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
+A
   Notice that we call a variable called motor_pan, which is the pin identifier indicating where the pan servo is attached to the RoboPi; that would have to established as in the Basic Usage section. We also call the parameter pan_forward from the xml_params; that will have to be established like in the Intermediate Usage section.
