@@ -81,9 +81,9 @@ def ui():
     wristGrasperOpen()
   else:
     print "Not a command"
-  ui()  
+ # ui()  
 
-ui()
+# ui()
 # python
 # import stepper_control as st
 # st.elbow(True)
