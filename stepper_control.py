@@ -2,7 +2,7 @@ import RoboPiLib_pwm as RPL
 import time as time
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
-shoulder_pul = 7
+shoulder_pul = 1
 shoulder_dir = 6
 elbow_pul = 5
 elbow_dir = 3
@@ -90,3 +90,4 @@ def ui():
 # st.elbow(False) Run in the other direction
 # st.elbow(True, 2) Run for 2 seconds
 # st.elbow(True, 2, 100) Run for 2 seconds much faster
+
