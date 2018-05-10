@@ -135,36 +135,29 @@ In the more advanced usage, you can set the functionality of new keyboard button
       RPL.servoWrite(motor_pan,0)
   ```
 
-BSTART: plug everything into its corresponding connections 
+START RUNNING A STEPPER MOTOR: plug everything into its corresponding connections 
 
 TO START CODE:
 1. connect to robo wifi 
 2. open terminal 
-3. type: ssh student@192.168.21.150 
+3. type: ssh student@192.168.21.XXX (the 3 x's will be replaced by the number on your micro SD card)
+	**if ssh student@.... doesnt work try student@robo-XXX (again last 3 numbers on your micro SD card) 
 4. Password: Engineering!1
 5. cd RoboPi_controller 
 6. type python 
 
 PYTHON:
 1. type: Import stepper_control as SC
-2. type: SC. elbow 
-3. SC.elbow(True, 10, 200) **middle number is how many seconds you are running the code.  Second number is how fast it is, do not go any lower than 130!!
-
+2. type: SC.elbow 
+3. SC.elbow(True, 10, 200) **middle number is how many seconds you are running the code.  Second number is how fast the motor will run
+A
+A
 C
 ***True moves the arm up and False moves the arm down 
 B
 B
-B
+Need More information on how to troubleshoot or run the code, check out https://sites.google.com/bsmschool.org/engineeringwiki/programming/stepper-motor-control?authuser=0 for more information!B
 A
-A
-A
-A
-A
-A
-B
-B
-B
-B
 A
 A
 A
