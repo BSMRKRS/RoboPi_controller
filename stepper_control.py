@@ -2,10 +2,10 @@ import RoboPiLib_pwm as RPL
 import time as time
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
-shoulder_pul = 1
-shoulder_dir = 6
-elbow_pul = 5
-elbow_dir = 3
+shoulder_pul = 5
+shoulder_dir = 3
+elbow_pul = 1
+elbow_dir = 2
 
 up = True
 down = False
@@ -22,6 +22,7 @@ def stop():
   RPL.pwmWrite(elbow_pul, 0, 10000)
 
 def shoulder(dir, run_for = 1, speed = speed):
+  print "I have made it this far"
   if(dir):
     RPL.digitalWrite(shoulder_dir, 1)
   else:
@@ -29,7 +30,7 @@ def shoulder(dir, run_for = 1, speed = speed):
   RPL.pwmWrite(shoulder_pul, speed, speed * 2)
   time.sleep(run_for)
   stop()
-
+  print "this is completed"
 
 def elbow(dir, run_for = 1, speed = speed):
   if(dir):
