@@ -63,9 +63,9 @@ def wristGrasperOpen():
 def ui():
   input = raw_input()
   if input == "a":
-    shoulder(False,1,100)
+    shoulder(False,1,1000)
   elif input == "s":
-    shoulder(True,1,100)
+    shoulder(True,1,1000)
   elif input == "d":
     elbow(False,1,100)
   elif input == "f":
