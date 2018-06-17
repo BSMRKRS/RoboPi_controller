@@ -7,6 +7,11 @@ shoulder_dir = 6
 elbow_pul = 5
 elbow_dir = 3
 
+print shoulder_pul, " shoulder_pul"
+print shoulder_dir, " shoulder_dir"
+print elbow_pul, " elbow_pul"
+print elbow_dir, " elbow_dir"
+
 up = True
 down = False
 
@@ -83,7 +88,7 @@ def ui():
     print "Not a command"
   ui()  
 
-ui()
+# ui()
 # python
 # import stepper_control as st
 # st.elbow(True)
