@@ -5,8 +5,8 @@ RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
 shoulder_pul = 7
 shoulder_dir = 6
-elbow_pul = 5
-elbow_dir = 3
+elbow_pul = 1
+elbow_dir = 2
 
 print shoulder_pul, " shoulder_pul"
 print shoulder_dir, " shoulder_dir"
