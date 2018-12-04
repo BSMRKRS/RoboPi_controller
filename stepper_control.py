@@ -2,10 +2,10 @@ import RoboPiLib_pwm as RPL
 import time as time
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
-shoulder_pul = 7
-shoulder_dir = 6
-elbow_pul = 5
-elbow_dir = 3
+shoulder_pul = 6
+shoulder_dir = 7
+elbow_pul = 1
+elbow_dir = 2
 
 print shoulder_pul, " shoulder_pul"
 print shoulder_dir, " shoulder_dir"
