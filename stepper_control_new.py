@@ -38,7 +38,7 @@ def shoulder(dir, run_for = 1, speed = speed):
 
 
 def elbow(dir, run_for = 1, speed = speed):
-  (run_for = run_for * 3724 / speed)
+  run_for = run_for * 3724 / speed
   if(dir):
     RPL.digitalWrite(elbow_dir, 1)
   else:
