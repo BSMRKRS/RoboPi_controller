@@ -28,7 +28,6 @@ def stop():
   RPL.pwmWrite(elbow_pul, 0, 10000)
 
 def shoulder(dir, run_for = 1, speed = speed):
-  (run_for = run_for * 3724 / speed)
   if(dir):
     RPL.digitalWrite(shoulder_dir, 1)
   else:
@@ -39,6 +38,7 @@ def shoulder(dir, run_for = 1, speed = speed):
 
 
 def elbow(dir, run_for = 1, speed = speed):
+  (run_for = run_for * 3724 / speed)
   if(dir):
     RPL.digitalWrite(elbow_dir, 1)
   else:
