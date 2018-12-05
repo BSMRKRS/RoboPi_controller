@@ -3,8 +3,8 @@ import time as time
 import math
 RPL.RoboPiInit("/dev/ttyAMA0",115200)
 
-shoulder_pul = 7
-shoulder_dir = 6
+shoulder_pul = 6
+shoulder_dir = 7
 elbow_pul = 1
 elbow_dir = 2
 
@@ -28,6 +28,7 @@ def stop():
   RPL.pwmWrite(elbow_pul, 0, 10000)
 
 def shoulder(dir, run_for = 1, speed = speed):
+  (run_for = run_for * 3724 / speed)
   if(dir):
     RPL.digitalWrite(shoulder_dir, 1)
   else:
